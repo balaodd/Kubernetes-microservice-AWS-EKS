@@ -3,17 +3,21 @@ kind: ClusterConfig
 
 metadata:
   name: blog-cluster
-  region: us-west-2
+  region: ap-south-1
   version: "1.31"
 
+iam:
+  withOIDC: true
 managedNodeGroups:
   - name: blog-workers
-    instanceType: t3a.medium
+    instanceType: t3.small
     minSize: 2
-    maxSize: 5
-    desiredCapacity: 3
+    maxSize: 3
+    desiredCapacity: 2
     volumeSize: 20
-    amiFamily: AmazonLinux2
+    amiFamily: AmazonLinux2023
+    privateNetworking: false
+
     iam:
       withAddonPolicies:
         autoScaler: true
