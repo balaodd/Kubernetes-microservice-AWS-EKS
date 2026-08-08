@@ -5,33 +5,16 @@ pipeline {
 
         stage('Checkout') {
             steps {
-                echo 'Code successfully checked out from GitHub'
+                checkout scm
             }
         }
 
-        stage('Environment Check') {
+        stage('Test Environment') {
             steps {
-                sh 'git --version'
                 sh 'docker --version'
                 sh 'aws --version'
-                sh 'kubectl version --client'
+                sh 'trivy --config /dev/null --version'
             }
-        }
-
-        stage('Build Test') {
-            steps {
-                echo 'Jenkins pipeline is working successfully!'
-            }
-        }
-    }
-
-    post {
-        success {
-            echo 'CI pipeline completed successfully.'
-        }
-
-        failure {
-            echo 'CI pipeline failed.'
         }
     }
 }
