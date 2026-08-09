@@ -16,22 +16,23 @@ pipeline {
             }
         }
 
-        stage('Trivy Filesystem Scan') {
-            steps {
-                sh '''
-                    trivy --config /dev/null fs \
-                    --severity HIGH,CRITICAL \
-                    --exit-code 0 .
-                '''
-            }
-        }
-
         stage('Build Frontend Docker Image') {
             steps {
                 sh '''
                     docker build \
                     -t ${FRONTEND_IMAGE}:${BUILD_NUMBER} \
                     ./frontend
+                '''
+            }
+        }
+
+        stage('Trivy Image Scan') {
+            steps {
+                sh '''
+                    trivy --config /dev/null image \
+                    --severity HIGH,CRITICAL \
+                    --exit-code 0 \
+                    ${FRONTEND_IMAGE}:${BUILD_NUMBER}
                 '''
             }
         }
